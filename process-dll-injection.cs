@@ -1,7 +1,14 @@
 // This code was originally published on codingvision. 
-//http://www.codingvision.net/miscellaneous/c-inject-a-dll-into-a-process-w-createremotethread
+// http://www.codingvision.net/miscellaneous/c-inject-a-dll-into-a-process-w-createremotethread
 //
 // Minor tweaks and commenting by @pwndizzle
+//
+// To run:
+// 1. Download or compile a target dll (see calc reference in readme) and place in c:\
+// 2. Compile code - C:\Windows\Microsoft.NET\Framework\v4.0.30319\csc.exe process-dll-injection.cs
+// 3. Start notepad
+// 4. Execute process-dll-injection.exe to see calc pop
+
 
 using System;
 using System.Diagnostics;
