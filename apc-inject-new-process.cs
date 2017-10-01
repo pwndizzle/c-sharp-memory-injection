@@ -1,6 +1,9 @@
 // Original code created by Casey Smith - https://gist.github.com/subTee/a8d86ee9b9792dac0f0f4b021f2763c1
 //
 // Modified and commented by @pwndizzle
+//
+// To run:
+// 1. C:\Windows\Microsoft.NET\Framework\v4.0.30319\csc.exe apc-injection.cs && apc-injection.exe
 
 using System;
 using System.Reflection;
