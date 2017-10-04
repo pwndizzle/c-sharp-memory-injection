@@ -2,7 +2,9 @@
 
 A set of scripts that demonstrate how to perform memory injection.
 
-Some useful shellcode/dll/exe for popping calc can be found below:
+I've tried to make these techniques as simple and opsec safe as possible, avoiding unnecessary memory modifications, process or file creation. I'm no C# expert or memory injection guru so use these examples at your own risk :)
+
+The shellcode used in the examples can be found below (there are also dll/exe versions too): 
 
 https://github.com/peterferrie/win-exec-calc-shellcode
 
@@ -14,4 +16,4 @@ https://github.com/peterferrie/win-exec-calc-shellcode
 
 - apc-injection-any-process.cs - APC injection using QueueAPC into a remote process. This method relies on the threads within the process entering an alertable state.
 
-- apc-injection-new-process.cs - APC injection using QueueAPC into a newly created process. As the thread of a newly created process will be alertable its easier to trigger APC usage with this technique, although you will generate a new process.
+- apc-injection-new-process.cs - APC injection using QueueAPC into a newly created process. As the threads of a newly created process will be alertable its easier to trigger APC usage with this technique, although you will generate a new process.
