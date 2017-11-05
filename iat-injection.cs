@@ -60,12 +60,12 @@ namespace Delivery
 			// Import descriptor for each DLL
 			IMAGE_IMPORT_DESCRIPTOR[] importDescriptors;
 			
-            // Convert file bytes to memorystream and use reader
-            MemoryStream stream = new MemoryStream(fileBytes, 0, fileBytes.Length);
-            BinaryReader reader = new BinaryReader(stream);
+			// Convert file bytes to memorystream and use reader
+			MemoryStream stream = new MemoryStream(fileBytes, 0, fileBytes.Length);
+			BinaryReader reader = new BinaryReader(stream);
 			
 			//Begin parsing structures
-            dosHeader = FromBinaryReader<IMAGE_DOS_HEADER>(reader);
+			dosHeader = FromBinaryReader<IMAGE_DOS_HEADER>(reader);
 
 			// Add 4 bytes to the offset
 			stream.Seek(dosHeader.e_lfanew, SeekOrigin.Begin);
