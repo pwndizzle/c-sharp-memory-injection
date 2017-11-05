@@ -7,8 +7,12 @@ To build and run:
 
 C:\Windows\Microsoft.NET\Framework\v4.0.30319\csc.exe iat-inject.cs && iat-inject.exe
 
+Note: By default this module is configured to target the CreateFileW import of notepad.exe. Notepad will need to be running before you execute this code!
+
 Note: During test it was found that shellcode execution would modify the stack and break subsequent functions.
 Afaik the solution is to use shellcode that cleans up after itself.
+
+Note: This code only supports x64 at the momemt, some further tweaks may be needed for x86.
 
 */
 
