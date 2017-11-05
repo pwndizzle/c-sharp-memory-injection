@@ -5,7 +5,7 @@ Parts of the PE parsing code was originally created by Casey Smith.
 
 To build and run:
 
-C:\Windows\Microsoft.NET\Framework\v4.0.30319\csc.exe iatinject.cs && iatinject.exe
+C:\Windows\Microsoft.NET\Framework\v4.0.30319\csc.exe iat-inject.cs && iat-inject.exe
 
 Note: During test it was found that shellcode execution would modify the stack and break subsequent functions.
 Afaik the solution is to use shellcode that cleans up after itself.
